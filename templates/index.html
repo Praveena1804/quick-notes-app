@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Quick Notes</h1>
+
+<form action="/add" method="post">
+    <textarea name="note"></textarea><br>
+    <button type="submit">Save</button>
+</form>
+
+<ul>
+{% for note in notes %}
+    <li>{{ note[1] }}</li>
+{% endfor %}
+</ul>
+
+</body>
+</html>
