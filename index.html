@@ -1,19 +1,38 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>Quick Notes</title>
+</head>
 <body>
 
 <h1>Quick Notes</h1>
 
-<form action="/add" method="post">
-    <textarea name="note"></textarea><br>
-    <button type="submit">Save</button>
-</form>
+<input id="noteInput" placeholder="Enter note">
+<button onclick="saveNote()">Save</button>
 
-<ul>
-{% for note in notes %}
-    <li>{{ note[1] }}</li>
-{% endfor %}
-</ul>
+<ul id="notesList"></ul>
+
+<script>
+function saveNote() {
+    let note = document.getElementById("noteInput").value;
+
+    let notes = JSON.parse(localStorage.getItem("notes") || "[]");
+    notes.push(note);
+
+    localStorage.setItem("notes", JSON.stringify(notes));
+
+    showNotes();
+}
+
+function showNotes() {
+    let notes = JSON.parse(localStorage.getItem("notes") || "[]");
+
+    document.getElementById("notesList").innerHTML =
+        notes.map(n => `<li>${n}</li>`).join("");
+}
+
+showNotes();
+</script>
 
 </body>
 </html>
