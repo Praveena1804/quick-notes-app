@@ -1,37 +1,133 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Quick Notes</title>
+    <meta charset="UTF-8">
+    <title>Quick Notes App</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            display: flex;
+            justify-content: center;
+            margin-top: 50px;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        input {
+            width: 70%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        button {
+            padding: 8px 12px;
+            border: none;
+            background: #007bff;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        li {
+            background: #f1f1f1;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: red;
+            padding: 5px 8px;
+            font-size: 12px;
+        }
+
+        .delete-btn:hover {
+            background: darkred;
+        }
+    </style>
 </head>
+
 <body>
 
-<h1>Quick Notes</h1>
+<div class="container">
+    <h1>Quick Notes</h1>
 
-<input id="noteInput" placeholder="Enter note">
-<button onclick="saveNote()">Save</button>
+    <input id="noteInput" placeholder="Enter your note">
+    <button onclick="saveNote()">Add</button>
 
-<ul id="notesList"></ul>
+    <ul id="notesList"></ul>
+</div>
 
 <script>
-function saveNote() {
-    let note = document.getElementById("noteInput").value;
 
-    let notes = JSON.parse(localStorage.getItem("notes") || "[]");
+function saveNote() {
+    let input = document.getElementById("noteInput");
+    let note = input.value.trim();
+
+    if (note === "") {
+        alert("Please enter a note!");
+        return;
+    }
+
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
     notes.push(note);
 
     localStorage.setItem("notes", JSON.stringify(notes));
 
+    input.value = "";
+    showNotes();
+}
+
+function deleteNote(index) {
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
+    notes.splice(index, 1);
+
+    localStorage.setItem("notes", JSON.stringify(notes));
     showNotes();
 }
 
 function showNotes() {
-    let notes = JSON.parse(localStorage.getItem("notes") || "[]");
+    let notes = JSON.parse(localStorage.getItem("notes")) || [];
 
-    document.getElementById("notesList").innerHTML =
-        notes.map(n => `<li>${n}</li>`).join("");
+    let list = document.getElementById("notesList");
+
+    list.innerHTML = notes.map((note, index) => `
+        <li>
+            ${note}
+            <button class="delete-btn" onclick="deleteNote(${index})">Delete</button>
+        </li>
+    `).join("");
 }
 
 showNotes();
+
 </script>
 
 </body>
