@@ -47,18 +47,7 @@
             background: #eef;
             padding: 8px;
             margin-bottom: 5px;
-            display: flex;
-            justify-content: space-between;
             border-radius: 5px;
-        }
-
-        .delete-btn {
-            background: red;
-            color: white;
-            border: none;
-            padding: 4px 8px;
-            cursor: pointer;
-            border-radius: 4px;
         }
     </style>
 </head>
@@ -91,17 +80,9 @@ function saveNote() {
 
     localStorage.setItem("notes", JSON.stringify(notes));
 
-    // ✅ Clear input after saving (your requirement)
+    // ✅ Clear input after saving
     input.value = "";
 
-    showNotes();
-}
-
-function deleteNote(index) {
-    let notes = JSON.parse(localStorage.getItem("notes")) || [];
-    notes.splice(index, 1);
-
-    localStorage.setItem("notes", JSON.stringify(notes));
     showNotes();
 }
 
@@ -111,14 +92,9 @@ function showNotes() {
     let list = document.getElementById("notesList");
     list.innerHTML = "";
 
-    notes.forEach((note, index) => {
+    notes.forEach(note => {
         let li = document.createElement("li");
-
-        li.innerHTML = `
-            ${note}
-            <button class="delete-btn" onclick="deleteNote(${index})">X</button>
-        `;
-
+        li.textContent = note;
         list.appendChild(li);
     });
 }
