@@ -7,69 +7,58 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            background: #f4f6f8;
             display: flex;
             justify-content: center;
-            margin-top: 50px;
+            align-items: center;
+            height: 100vh;
         }
 
         .container {
             background: white;
             padding: 20px;
-            width: 400px;
+            width: 350px;
             border-radius: 10px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
 
         h1 {
             text-align: center;
-            color: #333;
         }
 
         input {
             width: 70%;
             padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
+            margin-right: 5px;
         }
 
         button {
             padding: 8px 12px;
-            border: none;
-            background: #007bff;
-            color: white;
-            border-radius: 5px;
             cursor: pointer;
-        }
-
-        button:hover {
-            background: #0056b3;
         }
 
         ul {
             list-style: none;
             padding: 0;
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         li {
-            background: #f1f1f1;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-radius: 5px;
+            background: #eef;
+            padding: 8px;
+            margin-bottom: 5px;
             display: flex;
             justify-content: space-between;
-            align-items: center;
+            border-radius: 5px;
         }
 
         .delete-btn {
             background: red;
-            padding: 5px 8px;
-            font-size: 12px;
-        }
-
-        .delete-btn:hover {
-            background: darkred;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            border-radius: 4px;
         }
     </style>
 </head>
@@ -79,8 +68,8 @@
 <div class="container">
     <h1>Quick Notes</h1>
 
-    <input id="noteInput" placeholder="Enter your note">
-    <button onclick="saveNote()">Add</button>
+    <input id="noteInput" placeholder="Enter note">
+    <button onclick="saveNote()">Save</button>
 
     <ul id="notesList"></ul>
 </div>
@@ -91,6 +80,7 @@ function saveNote() {
     let input = document.getElementById("noteInput");
     let note = input.value.trim();
 
+    // Validation
     if (note === "") {
         alert("Please enter a note!");
         return;
@@ -101,7 +91,9 @@ function saveNote() {
 
     localStorage.setItem("notes", JSON.stringify(notes));
 
+    // ✅ Clear input after saving (your requirement)
     input.value = "";
+
     showNotes();
 }
 
@@ -117,15 +109,21 @@ function showNotes() {
     let notes = JSON.parse(localStorage.getItem("notes")) || [];
 
     let list = document.getElementById("notesList");
+    list.innerHTML = "";
 
-    list.innerHTML = notes.map((note, index) => `
-        <li>
+    notes.forEach((note, index) => {
+        let li = document.createElement("li");
+
+        li.innerHTML = `
             ${note}
-            <button class="delete-btn" onclick="deleteNote(${index})">Delete</button>
-        </li>
-    `).join("");
+            <button class="delete-btn" onclick="deleteNote(${index})">X</button>
+        `;
+
+        list.appendChild(li);
+    });
 }
 
+// Load notes on page load
 showNotes();
 
 </script>
