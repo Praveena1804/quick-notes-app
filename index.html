@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Quick Notes App</title>
+    <title>Quick Notes</title>
 
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: Arial;
             background: #f4f6f8;
             display: flex;
             justify-content: center;
@@ -14,73 +14,53 @@
             height: 100vh;
         }
 
-        .container {
+        .box {
             background: white;
             padding: 20px;
-            width: 350px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        h1 {
-            text-align: center;
+            width: 300px;
         }
 
         input {
             width: 70%;
             padding: 8px;
-            margin-right: 5px;
         }
 
         button {
-            padding: 8px 12px;
-            cursor: pointer;
-        }
-
-        ul {
-            list-style: none;
-            padding: 0;
-            margin-top: 15px;
+            padding: 8px;
         }
 
         li {
-            background: #eef;
-            padding: 8px;
-            margin-bottom: 5px;
-            border-radius: 5px;
+            margin-top: 5px;
         }
     </style>
 </head>
 
 <body>
 
-<div class="container">
-    <h1>Quick Notes</h1>
+<div class="box">
+    <h2>Quick Notes</h2>
 
-    <input id="noteInput" placeholder="Enter note">
+    <!-- Auto clear on click -->
+    <input id="noteInput" placeholder="Enter note" onfocus="this.value=''">
     <button onclick="saveNote()">Save</button>
 
     <ul id="notesList"></ul>
 </div>
 
 <script>
-
 function saveNote() {
     let input = document.getElementById("noteInput");
     let note = input.value.trim();
 
-    // Validation
-    if (note === "") {
-        alert("Please enter a note!");
-        return;
-    }
+    if (note === "") return;
 
     let notes = JSON.parse(localStorage.getItem("notes")) || [];
     notes.push(note);
 
     localStorage.setItem("notes", JSON.stringify(notes));
 
-    // ✅ Clear input after saving
+    // Clear after save
     input.value = "";
 
     showNotes();
@@ -88,8 +68,8 @@ function saveNote() {
 
 function showNotes() {
     let notes = JSON.parse(localStorage.getItem("notes")) || [];
-
     let list = document.getElementById("notesList");
+
     list.innerHTML = "";
 
     notes.forEach(note => {
@@ -99,9 +79,7 @@ function showNotes() {
     });
 }
 
-// Load notes on page load
 showNotes();
-
 </script>
 
 </body>
