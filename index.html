@@ -7,31 +7,15 @@
     <style>
         body {
             font-family: Arial;
-            background: #f4f6f8;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
         }
-
         .box {
-            background: white;
             padding: 20px;
+            background: #f4f6f8;
             border-radius: 10px;
-            width: 300px;
-        }
-
-        input {
-            width: 70%;
-            padding: 8px;
-        }
-
-        button {
-            padding: 8px;
-        }
-
-        li {
-            margin-top: 5px;
         }
     </style>
 </head>
@@ -41,14 +25,25 @@
 <div class="box">
     <h2>Quick Notes</h2>
 
-    <!-- Auto clear on click -->
-    <input id="noteInput" placeholder="Enter note" onfocus="this.value=''">
+    <!-- Clear only when user starts typing -->
+    <input id="noteInput" placeholder="Enter note" oninput="clearOnce()">
     <button onclick="saveNote()">Save</button>
 
     <ul id="notesList"></ul>
 </div>
 
 <script>
+let cleared = false;
+
+function clearOnce() {
+    let input = document.getElementById("noteInput");
+
+    if (!cleared) {
+        input.value = "";
+        cleared = true;
+    }
+}
+
 function saveNote() {
     let input = document.getElementById("noteInput");
     let note = input.value.trim();
@@ -60,8 +55,8 @@ function saveNote() {
 
     localStorage.setItem("notes", JSON.stringify(notes));
 
-    // Clear after save
     input.value = "";
+    cleared = false; // reset for next input
 
     showNotes();
 }
